@@ -17,8 +17,8 @@ void side_scrolling_text_layer_set_text_alignment(SideScrollingTextLayer * text_
 
 void side_scrolling_text_layer_animate(SideScrollingTextLayer *layer);
 
-// Maximum number of steps in the animation
-int16_t side_scrolling_text_layer_get_max_displacement(SideScrollingTextLayer* layer);
+// Maximum displacement of text
+int16_t side_scrolling_text_layer_get_max_offset(SideScrollingTextLayer* layer);
 
 void side_scrolling_text_layer_set_forward_duration(SideScrollingTextLayer* layer, int dur);
 
