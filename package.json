@@ -1,0 +1,33 @@
+{
+  "name": "side-scrolling-text-layer",
+  "author": {
+    "name": "Ben Caller",
+    "email": "bcaller@gmail.com"
+  },
+  "description": "Animated single-line TextLayer, scrolling to show the whole string",
+  "version": "1.0.0",
+  "files": ["dist.zip"],
+  "keywords": ["pebble-package"],
+  "dependencies": {},
+  "license": "GPL",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bcaller/pbl-side-scrolling-text-layer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bcaller/pbl-side-scrolling-text-layer/issues"
+  },
+  "homepage": "https://github.com/bcaller/pbl-side-scrolling-text-layer#readme",
+  "pebble": {
+    "projectType": "package",
+    "sdkVersion": "3",
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "chalk"
+    ],
+    "resources": {
+      "media": []
+    }
+  }
+}
