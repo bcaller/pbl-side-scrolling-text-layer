@@ -38,7 +38,7 @@ void draw(Layer *layer, GContext *ctx) {
 	graphics_draw_text(ctx, data->text, data->font, 
 		(GRect){
 			.origin={bounds.origin.x - data->offset,bounds.origin.y},
-			.size={bounds.size.w + 200, bounds.size.h}
+			.size={bounds.size.w * 15, bounds.size.h}
 		}, GTextOverflowModeFill, data->alignment, NULL);
 	
 	graphics_context_set_text_color(ctx, data->text_color);
