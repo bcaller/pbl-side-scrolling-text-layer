@@ -26,12 +26,12 @@ typedef struct {
 
 static int16_t ZERO = 0;
 
-SideScrollingTextData* side_scrolling_text_layer_get_outline_data(SideScrollingTextLayer* layer) {
+SideScrollingTextData* side_scrolling_text_layer_get_data(SideScrollingTextLayer* layer) {
 	return layer_get_data((Layer*)layer);
 }
 
 void draw(Layer *layer, GContext *ctx) {
-	SideScrollingTextData* data = side_scrolling_text_layer_get_outline_data((SideScrollingTextLayer*)layer);
+	SideScrollingTextData* data = side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer);
 	GRect bounds = layer_get_bounds((Layer*)layer);
 	graphics_context_set_text_color(ctx, data->text_color);
 	
@@ -45,7 +45,7 @@ void draw(Layer *layer, GContext *ctx) {
 }
 
 static void set_animated_substring(SideScrollingTextLayer *layer, int16_t n) {
-	SideScrollingTextData* data = side_scrolling_text_layer_get_outline_data((SideScrollingTextLayer*)layer);
+	SideScrollingTextData* data = side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer);
 	data->chars_from_beginning = n;
 	layer_mark_dirty((Layer*)layer);
 }
@@ -60,17 +60,18 @@ static const PropertyAnimationImplementation s_animation_implementation = {
 };
 
 static void side_scrolling_text_layer_stop(SideScrollingTextLayer *layer) {
-	SideScrollingTextData* data = side_scrolling_text_layer_get_outline_data((SideScrollingTextLayer*)layer);
-	animation_unschedule(data->scroll_anim);
-	data->chars_from_beginning = 0;
-	layer_mark_dirty((Layer*)layer);
-	animation_destroy(data->scroll_anim);
+	SideScrollingTextData* data = side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer);
+	if(animation_is_scheduled(data->scroll_anim)) {
+		animation_unschedule(data->scroll_anim);
+		data->chars_from_beginning = 0;
+		layer_mark_dirty((Layer*)layer);
+	}
 }
 
 void side_scrolling_text_layer_animate(SideScrollingTextLayer *layer) {
 	side_scrolling_text_layer_stop(layer);
 	side_scrolling_text_layer_get_max_displacement(layer);
-	SideScrollingTextData* data = side_scrolling_text_layer_get_outline_data((SideScrollingTextLayer*)layer);
+	SideScrollingTextData* data = side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer);
 	if(data->max_cfb <= 0) return;
 	
 	PropertyAnimation* scroll_anim = property_animation_create(&s_animation_implementation, layer, NULL, NULL);
@@ -123,7 +124,7 @@ Layer* side_scrolling_text_layer_get_layer(SideScrollingTextLayer* layer) {
 }
 
 int16_t side_scrolling_text_layer_get_max_displacement(SideScrollingTextLayer* layer) {
-	SideScrollingTextData* data = side_scrolling_text_layer_get_outline_data((SideScrollingTextLayer*)layer);
+	SideScrollingTextData* data = side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer);
 	if(!data->max_cfb_calculated) {
 		GRect bounds = layer_get_bounds((Layer*)layer);
 		int16_t width_of_text = graphics_text_layout_get_content_size(
@@ -141,46 +142,46 @@ int16_t side_scrolling_text_layer_get_max_displacement(SideScrollingTextLayer* l
 }
 
 void side_scrolling_text_layer_set_text(SideScrollingTextLayer* layer, char* text) {
-	SideScrollingTextData* data = side_scrolling_text_layer_get_outline_data((SideScrollingTextLayer*)layer);
+	SideScrollingTextData* data = side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer);
 	data->text = text;
 	data->max_cfb_calculated = false;
 	side_scrolling_text_layer_stop(layer);
 }
 
 void side_scrolling_text_layer_set_font(SideScrollingTextLayer* layer, GFont font) {
-	SideScrollingTextData* data = side_scrolling_text_layer_get_outline_data((SideScrollingTextLayer*)layer);
+	SideScrollingTextData* data = side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer);
 	data->font = font;
 	data->max_cfb_calculated = false;
 	side_scrolling_text_layer_stop(layer);
 }
 
 void side_scrolling_text_layer_set_forward_duration(SideScrollingTextLayer* layer, int dur) {
-	SideScrollingTextData* data = side_scrolling_text_layer_get_outline_data((SideScrollingTextLayer*)layer);
+	SideScrollingTextData* data = side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer);
 	data->forward_scroll_duration = dur;
 }
 
 void side_scrolling_text_layer_set_reverse_duration(SideScrollingTextLayer* layer, int dur) {
-	SideScrollingTextData* data = side_scrolling_text_layer_get_outline_data((SideScrollingTextLayer*)layer);
+	SideScrollingTextData* data = side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer);
 	data->reverse_scroll_duration = dur;
 }
 
 void side_scrolling_text_layer_set_delays(SideScrollingTextLayer* layer, int start_delay, int end_delay) {
-	SideScrollingTextData* data = side_scrolling_text_layer_get_outline_data((SideScrollingTextLayer*)layer);
+	SideScrollingTextData* data = side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer);
 	data->delay_at_start = start_delay;
 	data->delay_at_end = end_delay;
 }
 
 void side_scrolling_text_layer_set_text_alignment(SideScrollingTextLayer * layer, GTextAlignment text_alignment){
-	side_scrolling_text_layer_get_outline_data((SideScrollingTextLayer*)layer)->alignment = text_alignment;
+	side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer)->alignment = text_alignment;
 }
 
 void side_scrolling_text_layer_set_text_color(SideScrollingTextLayer * layer, GColor text_color) {
-	SideScrollingTextData* data = side_scrolling_text_layer_get_outline_data((SideScrollingTextLayer*)layer);
+	SideScrollingTextData* data = side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer);
 	data->text_color = text_color;
 }
 
 void side_scrolling_text_layer_set_curve(SideScrollingTextLayer* layer, AnimationCurve curve, AnimationCurveFunction curve_function) {
-	SideScrollingTextData* data = side_scrolling_text_layer_get_outline_data((SideScrollingTextLayer*)layer);
+	SideScrollingTextData* data = side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer);
 	data->curve = curve;
 	data->curve_function = curve_function;
 }
