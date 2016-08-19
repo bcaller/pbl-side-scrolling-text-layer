@@ -5,7 +5,7 @@
     "email": "bcaller@gmail.com"
   },
   "description": "Animated single-line TextLayer, scrolling to show the whole string",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "files": ["dist.zip"],
   "keywords": ["pebble-package"],
   "dependencies": {},
