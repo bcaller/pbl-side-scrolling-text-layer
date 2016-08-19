@@ -37,8 +37,8 @@ void draw(Layer *layer, GContext *ctx) {
 	
 	graphics_draw_text(ctx, data->text, data->font, 
 		(GRect){
-			.origin={bounds.origin.x - data->offset,bounds.origin.y},
-			.size={bounds.size.w * 15, bounds.size.h}
+			.origin={bounds.origin.x - data->offset, bounds.origin.y},
+			.size={bounds.size.w * (data->offset / bounds.origin.x + 3), bounds.size.h}
 		}, GTextOverflowModeFill, data->alignment, NULL);
 	
 	graphics_context_set_text_color(ctx, data->text_color);
@@ -61,9 +61,9 @@ static const PropertyAnimationImplementation s_animation_implementation = {
 
 static void side_scrolling_text_layer_stop(SideScrollingTextLayer *layer) {
 	SideScrollingTextData* data = side_scrolling_text_layer_get_data((SideScrollingTextLayer*)layer);
+	data->offset = 0;
 	if(animation_is_scheduled(data->scroll_anim)) {
 		animation_unschedule(data->scroll_anim);
-		data->offset = 0;
 		layer_mark_dirty((Layer*)layer);
 	}
 }
