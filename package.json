@@ -5,7 +5,7 @@
     "email": "bcaller@gmail.com"
   },
   "description": "Animated single-line TextLayer, scrolling to show the whole string",
-  "version": "1.1.5",
+  "version": "2.0.0",
   "files": ["dist.zip"],
   "keywords": ["pebble-package"],
   "dependencies": {},
@@ -24,7 +24,8 @@
     "targetPlatforms": [
       "aplite",
       "basalt",
-      "chalk"
+      "chalk",
+      "diorite"
     ],
     "resources": {
       "media": []
